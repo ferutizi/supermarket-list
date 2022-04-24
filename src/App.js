@@ -18,8 +18,8 @@ function App() {
 
   const [items, setItems] = useState([])
 
-  const showModal = () => {
-    setEstadoModal(estadoModal = true)
+  const showModal = (show) => {
+    setEstadoModal(estadoModal = show)
   }
 
   const [contador, aumentar] = useContador()
@@ -28,7 +28,6 @@ function App() {
     e.preventDefault()
 
     aumentar()
-    setEstadoModal(false)
 
     setItems([
       ...items,
@@ -38,15 +37,13 @@ function App() {
     reset()
   }
 
-  const eliminar = () => {
-    console.log(formulario.id)
+  const eliminar = (id) => {
+    console.log(id)
     setItems([
-      ...items,
-      formulario.splice(formulario.id)
+      items,
+      items.filter(formulario => formulario.id !== id)
     ])
   }
-
-  console.log(formulario.id)
 
   return (
     <>
@@ -54,7 +51,7 @@ function App() {
         <h1>Supermarket list</h1>
         <h3>item(s): {contador}</h3>
         <Button className='btn--principal' onClick={showModal}>Add item</Button>
-        <Modal estado={estadoModal} cambiarEstado={setEstadoModal}>
+        <Modal estado={estadoModal} cambiarEstado={showModal}>
           <h2>Add item</h2>
           <form onSubmit={submit}>
             <input
@@ -63,17 +60,19 @@ function App() {
             value={formulario.value}
             onChange={handleChange}
             />
-            <Button className='btn--secundario' onClick={estadoModal = () => setEstadoModal(false)}>Close</Button>
-            <Button className='btn--principal' type='submit'>Add</Button>
-            <Button className='btn--principal grande'><span>Add </span>and add another</Button>
+            <Button className='btn--secundario' onClick={estadoModal = () => showModal(false)}>Close</Button>
+            <Button className='btn--principal' onClick={estadoModal = () => showModal(true)}>Add</Button>
+            <Button className='btn--principal grande' onClick={estadoModal = () => showModal(true)}><span>Add </span>and add another</Button>
           </form>
         </Modal>
       </Container>
       <List>
         {items.map(x =>
           <Item className='item--container'>
-            <Li className='item--list' key={x.id}>{x.formulario}</Li>
-            <span onClick={() => eliminar()} className='btn--inherit'>delete</span>
+            <Li className='item--list' key={x.id}>{x.formulario}
+              {/* handleDelete handleDelete={() => items.handleDelete(x.id)} */}
+            </Li>
+            <Button onClick={() => eliminar(x.id)} className='btn--inherit'>delete</Button>
           </Item>
         )}
       </List>
