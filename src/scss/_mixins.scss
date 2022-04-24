@@ -1,0 +1,15 @@
+@mixin buttons($color, $ancho: 156px) {
+    padding: 11px 10px;
+    width: $ancho;
+    margin: 0px 7px;
+    display: inline;
+    background-color: $color;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    font-size: 16px;
+    cursor: pointer;
+    &:active {
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    } 
+}
