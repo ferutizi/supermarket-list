@@ -18,11 +18,7 @@ function App() {
 
   const [items, setItems] = useState([])
 
-  const showModal = (show) => {
-    setEstadoModal(estadoModal = show)
-  }
-
-  const [contador, aumentar] = useContador()
+  const [contador, aumentar, disminuir] = useContador()
 
   const submit = (e) => {
     e.preventDefault()
@@ -37,12 +33,17 @@ function App() {
     reset()
   }
 
+  const showModal = (show) => {
+    setTimeout(() => {
+      setEstadoModal(estadoModal = show)
+    }, 10);
+  }
+
   const eliminar = (id) => {
     console.log(id)
-    setItems([
-      items,
-      items.filter(formulario => formulario.id !== id)
-    ])
+    setItems((items) => items.filter((x) => x.id !== id)
+    )
+    disminuir()
   }
 
   return (
@@ -60,9 +61,26 @@ function App() {
             value={formulario.value}
             onChange={handleChange}
             />
-            <Button className='btn--secundario' onClick={estadoModal = () => showModal(false)}>Close</Button>
-            <Button className='btn--principal' onClick={estadoModal = () => showModal(true)}>Add</Button>
-            <Button className='btn--principal grande' onClick={estadoModal = () => showModal(true)}><span>Add </span>and add another</Button>
+
+            <Button
+            className='btn--secundario'
+            type='button'
+            onClick={estadoModal = () => showModal(false)}
+            >Close
+            </Button>
+
+            <Button
+            className='btn--principal'
+            onClick={estadoModal = () => showModal(false)}
+            >Add
+            </Button>
+
+            <Button
+            className='btn--principal grande'
+            onClick={estadoModal = () => showModal(true)}
+            ><span>Add </span>and add another
+            </Button>
+
           </form>
         </Modal>
       </Container>
@@ -72,7 +90,7 @@ function App() {
             <Li className='item--list' key={x.id}>{x.formulario}
               {/* handleDelete handleDelete={() => items.handleDelete(x.id)} */}
             </Li>
-            <Button onClick={() => eliminar(x.id)} className='btn--inherit'>delete</Button>
+            <span onClick={() => eliminar(x.id)} className='btn--inherit'>delete</span>
           </Item>
         )}
       </List>
