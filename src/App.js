@@ -50,13 +50,16 @@ function App() {
     setError(false)
   }
 
-  const showModal = (show) => {
-    if(error) {
+  const showModal = (show, e) => {
+    if(!formulario.formulario) {
       setTimeout(() => {
-        setEstadoModal(estadoModal = show)
+        setEstadoModal(estadoModal = true)
       }, 10);
     } else {
-      setEstadoModal(true)
+      setTimeout(() => {
+        setEstadoModal(show)
+      }, 10);
+      return
     }
   }
 
