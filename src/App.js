@@ -9,6 +9,7 @@ import Modal from './components/Modal';
 import Li from './components/Li';
 import Item from './components/Item';
 import List from './components/List';
+import PintarError from './components/PintarError';
 
 function App() {
   let [estadoModal, setEstadoModal] = useState(false)
@@ -17,11 +18,21 @@ function App() {
   })
 
   const [items, setItems] = useState([])
-
   const [contador, aumentar, disminuir] = useContador()
+  const [error, setError] = useState(false)
 
-  const submit = (e) => {
+  const submit = (e, show) => {
     e.preventDefault()
+
+    if (!formulario.formulario) {
+      console.log(formulario.formulario)
+      setError(true)
+      console.log('err')
+      PintarError()
+      return
+    }
+
+    setError(false)
 
     aumentar()
 
@@ -30,19 +41,28 @@ function App() {
       formulario,
     ])
 
+    e.target.reset()
     reset()
   }
 
+  const add = () => {
+    setEstadoModal(true)
+    setError(false)
+  }
+
   const showModal = (show) => {
-    setTimeout(() => {
-      setEstadoModal(estadoModal = show)
-    }, 10);
+    if(error) {
+      setTimeout(() => {
+        setEstadoModal(estadoModal = show)
+      }, 10);
+    } else {
+      setEstadoModal(true)
+    }
   }
 
   const eliminar = (id) => {
-    console.log(id)
-    setItems((items) => items.filter((x) => x.id !== id)
-    )
+    setItems((items) => items.filter((x) => x.id !== id))
+
     disminuir()
   }
 
@@ -51,7 +71,7 @@ function App() {
       <Container>
         <h1>Supermarket list</h1>
         <h3>item(s): {contador}</h3>
-        <Button className='btn--principal' onClick={showModal}>Add item</Button>
+        <Button className='btn--principal' onClick={add}>Add item</Button>
         <Modal estado={estadoModal} cambiarEstado={showModal}>
           <h2>Add item</h2>
           <form onSubmit={submit}>
@@ -60,12 +80,17 @@ function App() {
             placeholder='product'
             value={formulario.value}
             onChange={handleChange}
+            autoFocus='autofocus'
             />
+
+            <PintarError>
+              {error && 'enter the product you want to add to the list'}  
+            </PintarError>
 
             <Button
             className='btn--secundario'
             type='button'
-            onClick={estadoModal = () => showModal(false)}
+            onClick={estadoModal = () => setEstadoModal(false)}
             >Close
             </Button>
 
