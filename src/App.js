@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-
 import { useState } from 'react';
 import useContador from './hooks/useContador';
 import useFormulario from './hooks/useFormulario';
@@ -15,42 +14,41 @@ function App() {
   let [estadoModal, setEstadoModal] = useState(false)
   const [formulario, handleChange, reset] = useFormulario({
     id: uuidv4(),
-  })
+  });
 
-  const [items, setItems] = useState([])
-  const [contador, aumentar, disminuir] = useContador()
-  const [error, setError] = useState(false)
+  const [items, setItems] = useState([]);
+  const [contador, aumentar, disminuir] = useContador();
+  const [error, setError] = useState(false);
 
-  const submit = (e, show) => {
-    e.preventDefault()
+  const submit = (e) => {
+    e.preventDefault();
 
     if (!formulario.formulario) {
-      console.log(formulario.formulario)
-      setError(true)
-      console.log('err')
-      PintarError()
-      return
+      setError(true);
+      console.log('err');
+      PintarError();
+      return;
     }
 
-    setError(false)
+    setError(false);
 
-    aumentar()
+    aumentar();
 
     setItems([
       ...items,
       formulario,
-    ])
+    ]);
 
-    e.target.reset()
-    reset()
+    e.target.reset();
+    reset();
   }
 
   const add = () => {
-    setEstadoModal(true)
-    setError(false)
+    setEstadoModal(true);
+    setError(false);
   }
 
-  const showModal = (show, e) => {
+  const showModal = (show) => {
     if(!formulario.formulario) {
       setTimeout(() => {
         setEstadoModal(estadoModal = true)
@@ -59,14 +57,14 @@ function App() {
       setTimeout(() => {
         setEstadoModal(show)
       }, 10);
-      return
+      return;
     }
   }
 
   const eliminar = (id) => {
-    setItems((items) => items.filter((x) => x.id !== id))
+    setItems((items) => items.filter((x) => x.id !== id));
 
-    disminuir()
+    disminuir();
   }
 
   return (
@@ -115,8 +113,8 @@ function App() {
       <List>
         {items.map(x =>
           <Item className='item--container'>
-            <Li className='item--list' key={x.id}>{x.formulario}
-              {/* handleDelete handleDelete={() => items.handleDelete(x.id)} */}
+            <Li className='item--list' key={x.id}>
+              {x.formulario}
             </Li>
             <span onClick={() => eliminar(x.id)} className='btn--inherit'>delete</span>
           </Item>

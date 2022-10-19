@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useState } from "react";
 
 const useFormulario = (inicial = '') => {
-    const [formulario, setFormulario] = useState(inicial)
+    const [formulario, setFormulario] = useState(inicial);
 
     const handleChange = (e) => {
         setFormulario({
@@ -16,7 +16,7 @@ const useFormulario = (inicial = '') => {
 
     return(
         [formulario, handleChange, reset]
-    )
+    );
 }
 
-export default useFormulario
+export default useFormulario;

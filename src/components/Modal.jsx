@@ -13,7 +13,7 @@ const Modal = ({children, estado}) => {
                 : null
             }
         </>
-    )
+    );
 }
 
-export default Modal
+export default Modal;

@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,600;0,700;0,800;1,200&display=swap');
 
 .btn--principal {
-  @include buttons($principal, 500px)
+  @include buttons($principal, 31.25rem);
 }
 
 body {
@@ -16,4 +16,10 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@media (max-width: 520px) {
+  .btn--principal {
+    @include buttons($principal, 20rem);
+  }
 }
