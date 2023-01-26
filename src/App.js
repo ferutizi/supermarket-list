@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useContador from './hooks/useContador';
 import useFormulario from './hooks/useFormulario';
 import Button from './components/Button';
@@ -22,25 +22,35 @@ function App() {
 
   const submit = (e) => {
     e.preventDefault();
-
-    if (!formulario.formulario) {
+    const dat = {items}
+    
+    if(!formulario.formulario) {
       setError(true);
       console.log('err');
       PintarError();
       return;
     }
-
     setError(false);
-
     aumentar();
-
     setItems([
       ...items,
       formulario,
     ]);
 
+    fetchPost(dat);
+
     e.target.reset();
     reset();
+  }
+
+  const fetchPost = async (dat) => {
+    const data = await fetch('http://localhost:8080/guardar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({"name": "b"})
+    })
   }
 
   const add = () => {
