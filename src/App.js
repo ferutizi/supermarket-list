@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+/* import { v4 as uuidv4 } from 'uuid'; */
 import { useState, useEffect } from 'react';
 import useContador from './hooks/useContador';
 import useFormulario from './hooks/useFormulario';
@@ -13,18 +13,18 @@ import PintarError from './components/PintarError';
 function App() {
   let [estadoModal, setEstadoModal] = useState(false)
   const [formulario, handleChange, reset] = useFormulario({
-    id: uuidv4(),
+/*     id: uuidv4(), */
   });
 
   const [items, setItems] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [contador, aumentar, disminuir] = useContador();
   const [error, setError] = useState(false);
 
   const submit = (e) => {
     e.preventDefault();
-    const dat = {items}
     
-    if(!formulario.formulario) {
+    if(!formulario.name) {
       setError(true);
       console.log('err');
       PintarError();
@@ -32,25 +32,36 @@ function App() {
     }
     setError(false);
     aumentar();
-    setItems([
+/*     setItems([
       ...items,
       formulario,
-    ]);
+    ]); */
 
-    fetchPost(dat);
+    postTodo(formulario);
 
     e.target.reset();
     reset();
   }
 
-  const fetchPost = async (dat) => {
+  const postTodo = async (formulario) => {
     const data = await fetch('http://localhost:8080/guardar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({"name": "b"})
+      body: JSON.stringify({name: formulario.name})
     })
+  }
+
+  useEffect(() => {
+    getTodo();
+  }, [items]);
+
+  const getTodo = async (formulario) => {
+    const res = await fetch('http://localhost:8080/');
+    const data = await res.json();
+    console.log(data);
+    setTodos(data);
   }
 
   const add = () => {
@@ -59,13 +70,13 @@ function App() {
   }
 
   const showModal = (show) => {
-    if(!formulario.formulario) {
+    if(!formulario.name) {
       setTimeout(() => {
-        setEstadoModal(estadoModal = true)
+        setEstadoModal(estadoModal = true);
       }, 10);
     } else {
       setTimeout(() => {
-        setEstadoModal(show)
+        setEstadoModal(show);
       }, 10);
       return;
     }
@@ -73,7 +84,6 @@ function App() {
 
   const eliminar = (id) => {
     setItems((items) => items.filter((x) => x.id !== id));
-
     disminuir();
   }
 
@@ -87,7 +97,7 @@ function App() {
           <h2>Add item</h2>
           <form onSubmit={submit}>
             <input
-            name='formulario'
+            name='name'
             placeholder='product'
             value={formulario.value}
             onChange={handleChange}
@@ -121,12 +131,12 @@ function App() {
         </Modal>
       </Container>
       <List>
-        {items.map(x =>
-          <Item className='item--container'>
-            <Li className='item--list' key={x.id}>
-              {x.formulario}
+        {todos.map(item =>
+          <Item key={item.id} className='item--container'>
+            <Li className='item--list' key={item.id}>
+              {item.name}
             </Li>
-            <span onClick={() => eliminar(x.id)} className='btn--inherit'>delete</span>
+            <span onClick={() => eliminar(item.id)} className='btn--inherit'>delete</span>
           </Item>
         )}
       </List>
