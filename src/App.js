@@ -1,4 +1,3 @@
-/* import { v4 as uuidv4 } from 'uuid'; */
 import { useState, useEffect } from 'react';
 import useContador from './hooks/useContador';
 import useFormulario from './hooks/useFormulario';
@@ -13,11 +12,9 @@ import PintarError from './components/PintarError';
 function App() {
   let [estadoModal, setEstadoModal] = useState(false)
   const [formulario, handleChange, reset] = useFormulario({
-/*     id: uuidv4(), */
   });
 
   const [items, setItems] = useState([]);
-  const [todos, setTodos] = useState([]);
   const [contador, aumentar, disminuir] = useContador();
   const [error, setError] = useState(false);
 
@@ -55,13 +52,13 @@ function App() {
 
   useEffect(() => {
     getTodo();
-  }, [items]);
+  }, [contador]);
 
-  const getTodo = async (formulario) => {
+  const getTodo = async () => {
     const res = await fetch('http://localhost:8080/');
     const data = await res.json();
     console.log(data);
-    setTodos(data);
+    setItems(data);
   }
 
   const add = () => {
@@ -86,6 +83,18 @@ function App() {
     setItems((items) => items.filter((x) => x.id !== id));
     disminuir();
   }
+
+  const deleteTodo = async (id) => {
+    const itemToDelete = items.find(item => item.id == id)
+    const data = await fetch('http://localhost:8080/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: id
+    })
+  }
+
 
   return (
     <>
@@ -114,13 +123,11 @@ function App() {
             onClick={estadoModal = () => setEstadoModal(false)}
             >Close
             </Button>
-
             <Button
             className='btn--principal'
             onClick={estadoModal = () => showModal(false)}
             >Add
             </Button>
-
             <Button
             className='btn--principal grande'
             onClick={estadoModal = () => showModal(true)}
@@ -131,7 +138,7 @@ function App() {
         </Modal>
       </Container>
       <List>
-        {todos.map(item =>
+        {items.map(item =>
           <Item key={item.id} className='item--container'>
             <Li className='item--list' key={item.id}>
               {item.name}
