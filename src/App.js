@@ -10,11 +10,13 @@ import PintarError from './components/PintarError';
 
 function App() {
   let [estadoModal, setEstadoModal] = useState(false)
-  const [formulario, handleChange, reset] = useFormulario({
-  });
-
+  const [formulario, handleChange, reset] = useFormulario({});
   const [items, setItems] = useState([]);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    getTodo();
+  }, []);
 
   const submit = (e) => {
     e.preventDefault();
@@ -38,18 +40,16 @@ function App() {
   }
 
   const postTodo = async (formulario) => {
-    const data = await fetch('http://localhost:8080/guardar', {
+    const res = await fetch('http://localhost:8080/guardar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({name: formulario.name})
     })
+    const data = await res.json();
+    formulario.id = data.id;
   }
-
-  useEffect(() => {
-    getTodo();
-  }, []);
 
   const getTodo = async () => {
     const res = await fetch('http://localhost:8080/');
@@ -79,7 +79,7 @@ function App() {
     const data = await fetch('http://localhost:8080/' + id, {
       method: 'DELETE'
     });
-    setItems((items) => items.filter((x) => x.id !== id));
+    setItems(items.filter((x) => x.id !== id));  
   }
 
   return (
