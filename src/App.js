@@ -29,10 +29,10 @@ function App() {
     }
     setError(false);
     aumentar();
-/*     setItems([
+    setItems([
       ...items,
       formulario,
-    ]); */
+    ]);
 
     postTodo(formulario);
 
@@ -52,15 +52,14 @@ function App() {
 
   useEffect(() => {
     getTodo();
-  }, [contador]);
+  }, []);
 
   const getTodo = async () => {
     const res = await fetch('http://localhost:8080/');
     const data = await res.json();
-    console.log(data);
-    setItems(data);
+    setItems(data)
   }
-
+  
   const add = () => {
     setEstadoModal(true);
     setError(false);
@@ -79,20 +78,12 @@ function App() {
     }
   }
 
-  const eliminar = (id) => {
+  const deleteTodo = async (id) => {
+    const data = await fetch('http://localhost:8080/' + id, {
+      method: 'DELETE'
+    });
     setItems((items) => items.filter((x) => x.id !== id));
     disminuir();
-  }
-
-  const deleteTodo = async (id) => {
-    const itemToDelete = items.find(item => item.id == id)
-    const data = await fetch('http://localhost:8080/', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: id
-    })
   }
 
 
@@ -143,7 +134,7 @@ function App() {
             <Li className='item--list' key={item.id}>
               {item.name}
             </Li>
-            <span onClick={() => eliminar(item.id)} className='btn--inherit'>delete</span>
+            <span onClick={() => deleteTodo(item.id)} className='btn--inherit'>delete</span>
           </Item>
         )}
       </List>
