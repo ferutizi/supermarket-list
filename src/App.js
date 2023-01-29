@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import useContador from './hooks/useContador';
 import useFormulario from './hooks/useFormulario';
 import Button from './components/Button';
 import Container from './components/Container';
@@ -15,7 +14,6 @@ function App() {
   });
 
   const [items, setItems] = useState([]);
-  const [contador, aumentar, disminuir] = useContador();
   const [error, setError] = useState(false);
 
   const submit = (e) => {
@@ -28,7 +26,6 @@ function App() {
       return;
     }
     setError(false);
-    aumentar();
     setItems([
       ...items,
       formulario,
@@ -83,15 +80,13 @@ function App() {
       method: 'DELETE'
     });
     setItems((items) => items.filter((x) => x.id !== id));
-    disminuir();
   }
-
 
   return (
     <>
       <Container>
         <h1>Supermarket list</h1>
-        <h3>item(s): {contador}</h3>
+        <h3>item(s): {items.length}</h3>
         <Button className='btn--principal' onClick={add}>Add item</Button>
         <Modal estado={estadoModal} cambiarEstado={showModal}>
           <h2>Add item</h2>
