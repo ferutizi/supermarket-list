@@ -140,7 +140,9 @@ function App() {
           </Item>
         )}
       </List>
-      <Button onClick={() => deleteAll()}>Eliminar todos</Button>
+      {items.length > 0 ?
+        <Button className='btn--principal' onClick={() => deleteAll()}>Eliminar todos</Button>
+        : null}
     </>
   );
 }

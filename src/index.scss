@@ -6,6 +6,14 @@
   @include buttons($principal, 31.25rem);
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  align-items: center;
+  justify-content: center;
+}
+
 body {
   background-color: #efefff;
   font-family: 'Poppins', sans-serif;
