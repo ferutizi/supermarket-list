@@ -10,6 +10,7 @@ podes probar la demo haciendo click [ACA](https://ferutizi.github.io/supermarket
 
 - React
 - Sass
+- MySQL
 
 ## Configuracion inicial
 

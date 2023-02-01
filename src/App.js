@@ -9,7 +9,7 @@ import List from './components/List';
 import PintarError from './components/PintarError';
 
 function App() {
-  let [estadoModal, setEstadoModal] = useState(false)
+  let [estadoModal, setEstadoModal] = useState(false);
   const [formulario, handleChange, reset] = useFormulario({});
   const [items, setItems] = useState([]);
   const [error, setError] = useState(false);
@@ -76,10 +76,17 @@ function App() {
   }
 
   const deleteTodo = async (id) => {
-    const data = await fetch('http://localhost:8080/' + id, {
+    await fetch('http://localhost:8080/' + id, {
       method: 'DELETE'
     });
-    setItems(items.filter((x) => x.id !== id));  
+    setItems(items.filter(item => item.id !== id));  
+  }
+
+  const deleteAll = async () => {
+    await fetch('http://localhost:8080/delete', {
+      method: 'DELETE'
+    });
+    getTodo();
   }
 
   return (
@@ -133,6 +140,7 @@ function App() {
           </Item>
         )}
       </List>
+      <Button onClick={() => deleteAll()}>Eliminar todos</Button>
     </>
   );
 }
