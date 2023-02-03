@@ -10,6 +10,8 @@ import PintarError from './components/PintarError';
 
 function App() {
   let [estadoModal, setEstadoModal] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [idToUpdate, setIdToUpdate] = useState(false);
   const [formulario, handleChange, reset] = useFormulario({});
   const [items, setItems] = useState([]);
   const [error, setError] = useState(false);
@@ -27,14 +29,18 @@ function App() {
       PintarError();
       return;
     }
-    setError(false);
     setItems([
       ...items,
       formulario,
     ]);
-
-    postTodo(formulario);
-
+    setError(false);
+    if(isUpdate) {
+      updateTodo(formulario)
+    } else {
+      postTodo(formulario);
+    }
+    setEstadoModal(false);
+    setIsUpdate(false);
     e.target.reset();
     reset();
   }
@@ -73,6 +79,22 @@ function App() {
       }, 10);
       return;
     }
+  }
+
+  const toUpdate = (id) => {
+    setIsUpdate(true);
+    setIdToUpdate(id);
+  }
+
+  const updateTodo = async (formulario) => {
+    await fetch('http://localhost:8080/update/' + idToUpdate, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({id: idToUpdate, name: formulario.name})
+    });
+    getTodo();
   }
 
   const deleteTodo = async (id) => {
@@ -126,6 +148,34 @@ function App() {
             onClick={estadoModal = () => showModal(true)}
             ><span>Add </span>and add another
             </Button>
+          </form>
+        </Modal>
+        <Modal estado={isUpdate} cambiarEstado={showModal}>
+          <h2>Update item</h2>
+          <form onSubmit={submit}>
+            <input
+            name='name'
+            value={formulario.value}
+            onChange={handleChange}
+            autoFocus='autofocus'
+            />
+
+            <PintarError>
+              {error && 'enter the product you want to add to the list'}  
+            </PintarError>
+
+            <Button
+            className='btn--secundario'
+            type='button'
+            onClick={estadoModal = () => setIsUpdate(false)}
+            >Close
+            </Button>
+            <Button
+            type='submit '
+            className='btn--principal'
+            onClick={estadoModal = () => showModal(false)}
+            >Update
+            </Button>
 
           </form>
         </Modal>
@@ -136,7 +186,10 @@ function App() {
             <Li className='item--list' key={item.id}>
               {item.name}
             </Li>
-            <span onClick={() => deleteTodo(item.id)} className='btn--inherit'>delete</span>
+            <div style={{display: 'flex', gap: '0.5em'}}>
+              <span onClick={() => toUpdate(item.id)} className='btn--inherit'>edit</span>
+              <span onClick={() => deleteTodo(item.id)} className='btn--inherit'>delete</span>
+            </div>
           </Item>
         )}
       </List>
