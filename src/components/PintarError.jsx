@@ -1,9 +1,9 @@
-import './PintarError.scss';
+import './PintarError.scss'
 
-const PintarError = ({children}) => {
-    return(
-      <div className='error'>{children}</div>
-    );
+const PintarError = ({ children }) => {
+  return (
+    <div className='error'>{children}</div>
+  )
 }
 
-export default PintarError;
+export default PintarError

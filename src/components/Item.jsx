@@ -1,7 +1,7 @@
-const Item = ({children, ...props}) => {
-    return(
-        <div {...props}>{children}</div>
-    );
+const Item = ({ children, ...props }) => {
+  return (
+    <div {...props}>{children}</div>
+  )
 }
 
-export default Item;
+export default Item
